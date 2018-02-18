@@ -1,0 +1,3 @@
+##usage: pip install -r equirements.txt
+#multi-search requirements
+appJar==0.90.0
