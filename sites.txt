@@ -2,52 +2,66 @@
 
 # comments start with "#"
 
-# "-Category-" will name a category
+# "- Category -" will name a category (primarily aesthetic)
 
+# Below is an empty container for a search data #
+# {"name": "", "srch_url": "", "ins_chr": "", "join_chr": "", "json": "False", "json_req_url_root": "False", "json_dict_key": "False"}
 # sites are named with "site name=url"
-# {"name": "", "srch_url": "", "ins_chr": "", "join_chr": ""}
+
 # name is site name or label
 # srch_url is url used in search
-# ins_chr is placeholer char for concatenation of with search term
+# ins_chr is placeholder character for to be substituted for search term
 # join_chr is string to use for joining search words in url
 
-#https://www.sainsburys.co.uk/webapp/wcs/stores/servlet/SearchDisplay?viewTaskName=SearchDisplayView&recipesSearch=false&orderBy=RELEVANCE&favouritesSelection=0&langId=44&searchTerm=nestle&searchSubmit=Search
+# json: indicates if a web request is to be made: True or False
+# json_req_url_root is the root url to be joined with the response. leave blank if request is full url
+# json_dict_key is the key used in the json response that holds the complete or incomplete URL for the request (leave blank if only URL string is returned)
+
+
 
 # general category
--General-
+- General -
 
 # amazon.co.uk
-{"name": "Amazon.co.uk", "srch_url": "https://www.amazon.co.uk/s/?url=field-keywords=#", "ins_chr": "#", "join_chr": "+"}
+{"name": "Amazon.co.uk", "srch_url": "https://www.amazon.co.uk/s/?url=field-keywords=#", "ins_chr": "#", "join_chr": "+", "json": "False", "json_req_url_root": "False", "json_dict_key": "False"}
 
 # argos.co.uk
-{"name": "Argos.co.uk", "srch_url": "https://www.argos.co.uk/search/#/opt/type:dym/", "ins_chr": "#", "join_chr": "-"}
+{"name": "Argos.co.uk", "srch_url": "https://www.argos.co.uk/search/#/opt/type:dym/", "ins_chr": "#", "join_chr": "-", "json": "False", "json_req_url_root": "False", "json_dict_key": "False"}
+
+
+# tesco direct
+{"name": "Tesco.co.uk (direct)", "srch_url": "https://www.tesco.com/direct/rest/searchlookup?query=#", "ins_chr": "#", "join_chr": "%20", "json": "True", "json_req_url_root": "https://www.tesco.com", "json_dict_key": "location"}
+# notworking#tesco.co.uk Direct=threadripper -- get json request
+
+# asda general
+{"name": "Asda (general)", "srch_url": "https://direct.asda.com/george/clothing/10,default,sc.html?q=#&ccgid=10", "ins_chr": "#", "join_chr": "+", "json": "False", "json_req_url_root": "False", "json_dict_key": "False"}
 
 # food category
--Food-
+- Food -
 
 # tesco.co.uk groceries
-{"name": "Tesco.co.uk (groceries)", "srch_url": "https://www.tesco.com/groceries/en-GB/search?query=#", "ins_chr": "#", "join_chr": "%20"}
+{"name": "Tesco.co.uk (groceries)", "srch_url": "https://www.tesco.com/groceries/en-GB/search?query=#", "ins_chr": "#", "join_chr": "%20", "json": "False", "json_req_url_root": "False", "json_dict_key": "False"}
 
 #aldi general
-{"name": "Aldi (general)", "srch_url": "https://www.aldi.co.uk/search?text=#", "ins_chr": "#", "join_chr": "%20"}
+{"name": "Aldi (general)", "srch_url": "https://www.aldi.co.uk/search?text=#", "ins_chr": "#", "join_chr": "%20", "json": "False", "json_req_url_root": "False", "json_dict_key": "False"}
 
 # sainsburys
-{"name": "Sainsburys (general)", "srch_url": "https://www.sainsburys.co.uk/webapp/wcs/stores/servlet/SearchDisplay?viewTaskName=SearchDisplayView&recipesSearch=true&orderBy=RELEVANCE&favouritesSelection=0&langId=44&storeId=10151&searchTerm=#&searchSubmit=Search", "ins_chr": "#", "join_chr": "+"}
+{"name": "Sainsburys (general)", "srch_url": "https://www.sainsburys.co.uk/webapp/wcs/stores/servlet/SearchDisplay?viewTaskName=SearchDisplayView&recipesSearch=true&orderBy=RELEVANCE&favouritesSelection=0&langId=44&storeId=10151&searchTerm=#&searchSubmit=Search", "ins_chr": "#", "join_chr": "+", "json": "False", "json_req_url_root": "False", "json_dict_key": "False"}
 
 # technology category
--Technology-
+- Technology -
 
 # scan.co.uk
-{"name": "Scan.co.uk", "srch_url": "https://www.scan.co.uk/search?q=#", "ins_chr": "#", "join_chr": "+"}
+{"name": "Scan.co.uk", "srch_url": "https://www.scan.co.uk/search?q=#", "ins_chr": "#", "join_chr": "+", "json": "False", "json_req_url_root": "False", "json_dict_key": "False"}
 
 #overclockers.co.uk
-{"name": "Overclockers.co.uk", "srch_url": "https://www.overclockers.co.uk/search?sSearch=#", "ins_chr": "#", "join_chr": "+"}
+{"name": "Overclockers.co.uk", "srch_url": "https://www.overclockers.co.uk/search?sSearch=#", "ins_chr": "#", "join_chr": "+", "json": "False", "json_req_url_root": "False", "json_dict_key": "False"}
 
 # ebuyer.co.uk
-{"name": "EBuyer.co.uk", "srch_url": "https://www.ebuyer.com/search?q=#", "ins_chr": "#", "join_chr": "+"}
+{"name": "EBuyer.co.uk", "srch_url": "https://www.ebuyer.com/search?q=#", "ins_chr": "#", "join_chr": "+", "json": "False", "json_req_url_root": "False", "json_dict_key": "False"}
 
 # pcworld.co.uk
-{"name": "PCWorld.co.uk", "srch_url": "https://www.pcworld.co.uk/gbuk/search-keywords/xx_xx_xx_xx_xx/#/xx-criteria.html", "ins_chr": "#", "join_chr": "+"}
+{"name": "PCWorld.co.uk", "srch_url": "https://www.pcworld.co.uk/gbuk/search-keywords/xx_xx_xx_xx_xx/#/xx-criteria.html", "ins_chr": "#", "join_chr": "+", "json": "False", "json_req_url_root": "False", "json_dict_key": "False"}
 
 
-#notworking#tesco.co.uk Direct=https://www.tesco.com/direct/rest/searchlookup?query=threadripper -- get json request
+
