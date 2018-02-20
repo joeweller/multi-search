@@ -1,3 +1,4 @@
+import requests
 import os
 import sys
 from platform import system as system_chk
@@ -27,7 +28,7 @@ def pre_gui_warning_exit(title, message):
         quit_gui.setIcon(b_dir + "/icons/windows-icon.ico")
 
     quit_gui.warningBox(title, message + "\n\nClose or Press OK to terminate")
-    
+
     del quit_gui
 
     sys.exit(0)
@@ -78,7 +79,27 @@ def make_links(main_list, selected, search_string):
         if val:  # if true, search for dict entry in main list
             for i in main_list:
                 if i["name"] == key:  # found correct dict for ticked box
-                    urls.append([i["name"], i["srch_url"].replace(i["ins_chr"], i["join_chr"].join(search_string))])
+                    tmp = [i["name"], i["srch_url"].replace(i["ins_chr"], i["join_chr"].join(search_string))]
+
+                    # if json is is not "False" (must be true), get request and create url
+                    if not i["json"].lower() == "False".lower():
+
+                        resp = requests.get(tmp[1])  # get request
+
+                        # if dict key is needed; extract data from dict. if not, get response as text
+                        if not i["json_dict_key"].lower() == "False".lower():
+                            resp = resp.json()
+                            resp = resp[i["json_dict_key"]]
+                        else:
+                            resp = resp.text
+
+                        # check for root URL. if needed, url will be appended to response and added to list
+                        if not i["json_req_url_root"].lower() == "False".lower():
+                            resp = i["json_req_url_root"] + resp
+
+                        tmp[1] = resp  # return full URL
+                    urls.append(tmp)
+
     return urls
 
 
@@ -100,7 +121,7 @@ def main():
 
     gui.setSize(300, 120)
 
-    gui.setTitle("Multi-Search")
+    gui.setTitle("multi-search")
 
     # test case for windows vs linux compatibility: icons
     if system_chk() == "Linux":
@@ -108,9 +129,9 @@ def main():
     elif system_chk() == "Windows":
         gui.setIcon(b_dir + "/icons/windows-icon.ico")
 
-    #gui.setLogLevel("critical")  # suppress warnings
+    gui.setLogLevel("critical")  # suppress warnings
 
-    gui.addTickOptionBox("Sites to search", option_list)  # list of sites to search
+    gui.addTickOptionBox("- site select -", option_list)  # list of sites to search
 
     gui.setResizable(canResize=False)  # disable resize
 
@@ -120,14 +141,14 @@ def main():
 
     gui.thread(search_check, gui)  # make a thread to check for empty search box
 
-    gui.addMenuCheckBox("Settings", "URL Popup")  # add URL Popup to menu
-    gui.setMenuCheckBox("Settings", "URL Popup")  # invert URL Popup (default: true)
-    gui.addMenuCheckBox("Settings", "Auto-Open")  # add auto-open feature
+    gui.addMenuCheckBox("settings", "URL Popup")  # add URL Popup to menu
+    gui.setMenuCheckBox("settings", "URL Popup")  # invert URL Popup (default: true)
+    gui.addMenuCheckBox("settings", "Auto-Open")  # add auto-open feature
 
     def search_button():
         """Search button calls this on press"""
 
-        selected = gui.getOptionBox("Sites to search")
+        selected = gui.getOptionBox("- site select -")
 
         s_string = gui.getEntry("search_field")
 
@@ -138,15 +159,15 @@ def main():
         else:
             urls = make_links(main_list, selected, s_string)
 
-            if gui.getMenuCheckBox("Settings", "Auto-Open"):
+            if gui.getMenuCheckBox("settings", "Auto-Open"):
                 for i in range(len(urls)):
                     if i == 0:
                         webbrowser.open_new(urls[i][1])
                     else:
                         webbrowser.open_new_tab(urls[i][1])
 
-            if gui.getMenuCheckBox("Settings", "URL Popup"):
-                gui.startSubWindow("Search URLs", modal=True, blocking=True)  # start setting url window popup
+            if gui.getMenuCheckBox("settings", "URL Popup"):
+                gui.startSubWindow("search URLs", modal=True, blocking=True)  # start setting url window popup
                 gui.addLabel("10", "URLs for \"" + s_string + "\"")
                 gui.addHorizontalSeparator()
 
@@ -158,15 +179,15 @@ def main():
 
                 gui.stopSubWindow()
 
-                gui.showSubWindow("Search URLs")
+                gui.showSubWindow("search URLs")
 
-                gui.destroySubWindow("Search URLs")  # destroy popup window on close
+                gui.destroySubWindow("search URLs")  # destroy popup window on close
 
-            if not gui.getMenuCheckBox("Settings", "Auto-Open") and not gui.getMenuCheckBox("Settings", "URL Popup"):
+            if not gui.getMenuCheckBox("settings", "Auto-Open") and not gui.getMenuCheckBox("settings", "URL Popup"):
                 gui.warningBox("No selected output", "Unable to output, please choose under \"settings\"", parent=None)
         return
 
-    gui.addButton("Search!", search_button)
+    gui.addButton("search!", search_button)
 
     gui.go()
     del gui
