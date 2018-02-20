@@ -1,4 +1,5 @@
-import sys, os
+import os
+import sys
 from platform import system as system_chk
 import appJar
 from time import sleep as sleep
@@ -26,6 +27,8 @@ def pre_gui_warning_exit(title, message):
         quit_gui.setIcon(b_dir + "/icons/windows-icon.ico")
 
     quit_gui.warningBox(title, message + "\n\nClose or Press OK to terminate")
+    
+    del quit_gui
 
     sys.exit(0)
 
@@ -105,7 +108,7 @@ def main():
     elif system_chk() == "Windows":
         gui.setIcon(b_dir + "/icons/windows-icon.ico")
 
-    gui.setLogLevel("critical")  # suppress warnings
+    #gui.setLogLevel("critical")  # suppress warnings
 
     gui.addTickOptionBox("Sites to search", option_list)  # list of sites to search
 
@@ -166,6 +169,7 @@ def main():
     gui.addButton("Search!", search_button)
 
     gui.go()
+    del gui
     exit(1)
 
 
