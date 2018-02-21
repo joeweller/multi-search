@@ -1,6 +1,5 @@
 ##usage: pip install -r requirements.txt
 #multi-search requirements
-
 appJar==0.90.0
 certifi==2018.1.18
 chardet==3.0.4
