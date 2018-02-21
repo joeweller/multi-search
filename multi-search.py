@@ -17,6 +17,39 @@ else:
         b_dir = os.path.dirname(os.path.abspath(__file__))
 
 
+def get_ini_config():
+    """examine multi-search.ini and extract take configuration"""
+    conf_test = ["urlfile", "auto-open", "show-url"]
+    prog_conf = {"urlfile": "", "auto-open": "", "show-url": ""}
+
+    if not os.path.isfile(os.getcwd() + "/multi-search.ini"):
+        pre_gui_warning_exit("\"multi-search.ini\" does not exist!\n\nPlease create in multi-search folder.")
+    with open(os.getcwd() + "/multi-search.ini") as ini:
+        for line in ini:
+            if not line.startswith("\n") or line.startswith("\r") or line.startswith("#"):
+                _ = line.strip().split("=")
+                prog_conf[_[0]] = _[1]
+
+    for c in conf_test:
+        if not prog_conf[c]:
+            pre_gui_warning_exit("\"multi-search.ini\" Error", "\"multi-search.ini\" does not include either:\n\n\""
+                                 + ", ".join(conf_test) + "\"" +
+                                 "\n\nPlease add arguments to file.")
+
+    # get bool values for config values
+    for a in conf_test[1:3]:
+
+        if prog_conf[a].lower() == "True".lower():
+            prog_conf[a] = True
+        elif prog_conf[a].lower() == "False".lower():
+            prog_conf[a] = False
+        else:
+            pre_gui_warning_exit("\"multi-search.ini\" error.", "Value for " + a +
+                                 "must be either:\n\"True\" or \"False\"")
+
+    return prog_conf
+
+
 def pre_gui_warning_exit(title, message):
     """Terminal error during init."""
     quit_gui = appJar.gui()
@@ -34,18 +67,17 @@ def pre_gui_warning_exit(title, message):
     sys.exit(0)
 
 
-def get_site_info():
-    """Open file and put values into 2 lists"""
+def get_site_info(urlfile):
+    """Open urlfile and put values into 2 lists"""
     main_list = []
     option_list = []
+    urlfile = os.getcwd() + "/" + urlfile
 
-    try:
-        t = open("sites.txt", "r")
-        t.close()
-    except FileNotFoundError:
-        pre_gui_warning_exit("sites.txt not found!", "Please create \"sites.txt\"!")
+    if not os.path.isfile(urlfile):
+        pre_gui_warning_exit("File not found!", "\"" + urlfile +
+                             "\" Not found.\n\nPlease create or edit \"multi-search.ini!\"")
 
-    with open("sites.txt", "r") as file:
+    with open(urlfile, "r") as file:
         for line in file:
             if line.startswith("#") or (line.startswith("\n") or line.startswith("\r")):
                 continue
@@ -115,7 +147,8 @@ def search_check(gui):
 
 def main():
     """Start main window and set params for widgets"""
-    main_list, option_list = get_site_info()
+    ini = get_ini_config()
+    main_list, option_list = get_site_info(ini["urlfile"])
 
     gui = appJar.gui()  # create object
 
@@ -142,8 +175,14 @@ def main():
     gui.thread(search_check, gui)  # make a thread to check for empty search box
 
     gui.addMenuCheckBox("settings", "URL Popup")  # add URL Popup to menu
-    gui.setMenuCheckBox("settings", "URL Popup")  # invert URL Popup (default: true)
+
+    if ini["show-url"]:
+        gui.setMenuCheckBox("settings", "URL Popup")  # invert URL Popup to true
+
     gui.addMenuCheckBox("settings", "Auto-Open")  # add auto-open feature
+
+    if ini["auto-open"]:
+        gui.setMenuCheckBox("settings", "Auto-Open")  # invert Auto-Open to true
 
     def search_button():
         """Search button calls this on press"""
