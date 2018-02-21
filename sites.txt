@@ -1,4 +1,4 @@
-###########README############
+########### USAGE ############
 
 # comments start with "#"
 
@@ -28,10 +28,12 @@
 # argos.co.uk
 {"name": "Argos.co.uk", "srch_url": "https://www.argos.co.uk/search/#/opt/type:dym/", "ins_chr": "#", "join_chr": "-", "json": "False", "json_req_url_root": "False", "json_dict_key": "False"}
 
+#john lewis
+#https://www.johnlewis.com/search?Ntt=laptops
+{"name": "John Lewis", "srch_url": "https://www.johnlewis.com/search?Ntt=#", "ins_chr": "#", "join_chr": "+", "json": "False", "json_req_url_root": "False", "json_dict_key": "False"}
 
 # tesco direct
 {"name": "Tesco.co.uk (direct)", "srch_url": "https://www.tesco.com/direct/rest/searchlookup?query=#", "ins_chr": "#", "join_chr": "%20", "json": "True", "json_req_url_root": "https://www.tesco.com", "json_dict_key": "location"}
-# notworking#tesco.co.uk Direct=threadripper -- get json request
 
 # asda general
 {"name": "Asda (general)", "srch_url": "https://direct.asda.com/george/clothing/10,default,sc.html?q=#&ccgid=10", "ins_chr": "#", "join_chr": "+", "json": "False", "json_req_url_root": "False", "json_dict_key": "False"}
